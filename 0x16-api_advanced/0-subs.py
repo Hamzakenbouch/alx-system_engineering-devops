@@ -1,23 +1,21 @@
 #!/usr/bin/python3
-"""0-sub"""
+"""Returns the number of subscribers for a given subreddit"""
 
 import requests
+import sys
 
 
 def number_of_subscribers(subreddit):
-    """return total subscribers for a given subreddit"""
+    """Returns the number of subscribers for a given subreddit"""
+    headers = {
+            'User-Agent': 'Your-User-Agent-Name'
+            }
+    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
 
-    url = f"https://www.reddit.com/r/{subreddit}/about.json"
-    headers = {"User-Agent": "My-Agent"}
-    allow_redirects = False
-    response = requests.get(
-            url, headers=headers, allow_redirects=allow_redirects)
-    if response.status_code == 200:
-        try:
-            data = response.json()
-            subscribers_count = data.get("data").get("subscribers")
-            return subscribers_count
-        except KeyError:
-            return 0
-    else:
+    response = requests.get(url, headers=headers)
+    try:
+        data = response.json()
+        subscribers = data['data']['subscribers']
+        return subscribers
+    except KeyError:
         return 0
